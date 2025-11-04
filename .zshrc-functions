@@ -1,0 +1,47 @@
+# --- Container Aliases ---
+
+# A single, smart function to run our environments
+run-env() {
+  # 1. Check for an argument
+  if [[ -z "$1" ]]; then
+    echo "Error: Please specify an environment."
+    echo "Usage: run-env [app | infra | base]"
+    return 1
+  fi
+
+  local env_name="$1"
+  local image_name=""
+  local project_mount=""
+  local extra_args=()
+
+  # 2. Set variables based on the argument
+  case "$env_name" in
+    app)
+      image_name="localhost/dev-app:latest"
+      project_mount="$HOME/app-projects:/projects"
+      ;;
+    infra)
+      image_name="localhost/dev-infra:latest"
+      project_mount="$HOME/infra-projects:/projects"
+      extra_args+=("-v" "$HOME/.kube:/root/.kube") # Add kube config
+      ;;
+    base)
+      image_name="localhost/dev-base:latest"
+      project_mount="$HOME:/projects" # Mount entire home
+      extra_args+=("-v" "$HOME/.kube:/root/.kube")
+      ;;
+    *)
+      echo "Error: Unknown environment '$env_name'."
+      echo "Usage: run-env [app | infra | base]"
+      return 1
+      ;;
+  esac
+
+  # 3. Run the podman command
+  podman run -it --rm     -v "$HOME/dev-env-config/.zshrc-container:/root/.zshrc"     -v "$HOME/dev-env-config/.gitconfig:/root/.gitconfig"     -v "$HOME/dev-env-config/config.nu:/root/.config/nushell/config.nu"     -v "$HOME/.zsh_secrets:/root/.zsh_secrets:ro"     -v "$HOME/.config/gcloud:/root/.config/gcloud"     -v "$HOME/snap/gh/current/.config/gh:/root/.config/gh"     -v "$HOME/.ssh:/root/.ssh:ro"     -v "$project_mount"     "${extra_args[@]}"     -e "GEMINI_API_KEY"     --name "${env_name}-dev"     "$image_name"
+}
+
+# 4. Create simple aliases for the new function
+alias apps="run-env app"
+alias infra="run-env infra"
+alias base="run-env base"

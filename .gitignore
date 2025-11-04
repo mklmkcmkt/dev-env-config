@@ -1,0 +1,26 @@
+# --- Critical Secrets ---
+# Contains API keys, service tokens, etc.
+.zsh_secrets
+
+# Ignore the ENTIRE .ssh folder (covers all private keys, known_hosts, and config files)
+.ssh/
+
+# --- Cloud/Tool Configurations ---
+# Google Cloud SDK (contains user tokens, ADC, and cached project info)
+.config/gcloud/
+
+# GitHub CLI (gh) configuration
+.config/gh/
+
+# Kubernetes config
+.kube/
+
+# --- Local Caches / History ---
+# Shell histories
+.bash_history
+.zsh_history
+.zcompdump*
+
+# Nushell History and Cache Files
+.config/nushell/history.txt
+.config/nushell/env.nu
