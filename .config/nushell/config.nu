@@ -61,3 +61,24 @@ def base [] {
     ]
     ^podman ...$args
 }
+
+# --- Custom alias to run the goose-host container ---
+alias goose-host = podman run -it --rm \
+  -v ~/.config/goose:/root/.config/goose:U \
+  -v ~/.gemini:/root/.gemini:U \
+  -v ~/app-projects:/workspace/app-projects:U \
+  -v ~/dev-env-config:/workspace/dev-env-config:U \
+  -v ~/infra-projects:/workspace/infra-projects:U \
+  -v ~/labs:/workspace/labs:U \
+  -v ~/local-agent:/workspace/local-agent:U \
+  -v ~/my-env:/workspace/my-env:U \
+  -v ~/.cargo:/root/.cargo:U \
+  -v ~/.dotnet:/root/.dotnet:U \
+  -v ~/.rustup:/root/.rustup:U \
+  -v ~/.terraform.d:/root/.terraform.d:U \
+  -v ~/.vscode:/root/.vscode:U \
+  -v ~/.gitconfig:/root/.gitconfig:ro,U \
+  -v ~/.profile:/root/.profile:ro,U \
+  -v ~/.zshenv:/root/.zshenv:ro,U \
+  -v ~/.oh-my-zsh:/root/.oh-my-zsh:ro,U \
+  goose-host

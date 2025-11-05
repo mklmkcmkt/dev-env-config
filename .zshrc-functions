@@ -1,4 +1,5 @@
 # --- Container Aliases ---
+# This file defines the functions and aliases for Podman integration.
 
 # A single, smart function to run our environments
 run-env() {
@@ -38,7 +39,19 @@ run-env() {
   esac
 
   # 3. Run the podman command
-  podman run -it --rm     -v "$HOME/dev-env-config/.zshrc-container:/root/.zshrc"     -v "$HOME/dev-env-config/.gitconfig:/root/.gitconfig"     -v "$HOME/dev-env-config/config.nu:/root/.config/nushell/config.nu"     -v "$HOME/.zsh_secrets:/root/.zsh_secrets:ro"     -v "$HOME/.config/gcloud:/root/.config/gcloud"     -v "$HOME/snap/gh/current/.config/gh:/root/.config/gh"     -v "$HOME/.ssh:/root/.ssh:ro"     -v "$project_mount"     "${extra_args[@]}"     -e "GEMINI_API_KEY"     --name "${env_name}-dev"     "$image_name"
+  podman run -it --rm \
+    -v "$HOME/dev-env-config/.zshrc-containers:/root/.zshrc" \
+    -v "$HOME/dev-env-config/.gitconfig:/root/.gitconfig" \
+    -v "$HOME/dev-env-config/config.nu:/root/.config/nushell/config.nu" \
+    -v "$HOME/.zsh_secrets:/root/.zsh_secrets:ro" \
+    -v "$HOME/.config/gcloud:/root/.config/gcloud" \
+    -v "$HOME/snap/gh/current/.config/gh:/root/.config/gh" \
+    -v "$HOME/.ssh:/root/.ssh:ro" \
+    -v "$project_mount" \
+    "${extra_args[@]}" \
+    -e "GEMINI_API_KEY" \
+    --name "${env_name}-dev" \
+    "$image_name"
 }
 
 # 4. Create simple aliases for the new function
