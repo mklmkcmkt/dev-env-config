@@ -2,12 +2,10 @@
 # Contains API keys, service tokens, etc.
 .zsh_secrets
 
+
 # Ignore the ENTIRE .ssh folder (covers all private keys, known_hosts, and config files)
 .ssh/
 
-# --- Cloud/Tool Configurations ---
-# Google Cloud SDK (contains user tokens, ADC, and cached project info)
-.config/gcloud/
 
 # GitHub CLI (gh) configuration
 .config/gh/
@@ -24,3 +22,100 @@
 # Nushell History and Cache Files
 .config/nushell/history.txt
 .config/nushell/env.nu
+
+#------------Terraform-------------------------
+# Local .terraform directories
+.terraform/
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Exclude all .tfvars files
+*.tfvars
+*.tfvars.json
+
+# Ignore override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore transient lock info files
+.terraform.tfstate.lock.info
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+# Ignore plan output files
+*tfplan*
+
+# Ignore graph output files
+*.dot
+
+# ===============================================
+# ADDITIONS FOR GOOGLE CLOUD
+# ===============================================
+
+# --- 1. Google Cloud Service Account Keys ---
+# Explicitly ignore common key file names. This is the #1 risk.
+*service-account*.json
+*credentials*.json
+key.json
+keys.json
+gcp-key.json
+*.p12
+
+# --- Cloud/Tool Configurations ---
+# Google Cloud SDK (contains user tokens, ADC, and cached project info)
+.config/gcloud/
+
+# --- 2. Common Environment & Secret Files ---
+# Ignore all .env files (used to store secrets)
+.env
+.env.*
+
+# BUT, allow example files, which are safe to commit
+!*.env.example
+!*.env.sample
+
+# --- 3. Other Private Key Formats ---
+# Your .ssh/ rule is good. This catches keys not in that folder.
+*.pem
+*.key
+
+# --- 4. OS & IDE Clutter ---
+# This keeps the repo clean of system/editor files.
+# macOS
+.DS_Store
+.AppleDouble
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# IDE / Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- 5. Other Cloud Tooling Configs ---
+# Boto config (used by gsutil and AWS CLI)
+.boto
+
+# Gsutil cache/config (if not in the default .config/gcloud/)
+.gsutil/
+
+# --- 6. Log & Build Files ---
+# More generic log files
+*.log
+
+# Python cache
+__pycache__/
+*.pyc
