@@ -23,6 +23,12 @@
 .config/nushell/history.txt
 .config/nushell/env.nu
 
+# -------Rust------------
+# --- Rust ---
+debug/
+target/
+**/*.rs.bk
+
 #------------Terraform-------------------------
 # Local .terraform directories
 .terraform/
@@ -59,7 +65,7 @@ terraform.rc
 *.dot
 
 # ===============================================
-# ADDITIONS FOR GOOGLE CLOUD
+# GOOGLE CLOUD AND Google Tools 
 # ===============================================
 
 # --- 1. Google Cloud Service Account Keys ---
@@ -71,9 +77,15 @@ keys.json
 gcp-key.json
 *.p12
 
+# Gemini
+.gemini/
+
 # --- Cloud/Tool Configurations ---
 # Google Cloud SDK (contains user tokens, ADC, and cached project info)
 .config/gcloud/
+
+# Gsutil cache/config (if not in the default .config/gcloud/)
+.gsutil/
 
 # --- 2. Common Environment & Secret Files ---
 # Ignore all .env files (used to store secrets)
@@ -108,9 +120,6 @@ ehthumbs.db
 # --- 5. Other Cloud Tooling Configs ---
 # Boto config (used by gsutil and AWS CLI)
 .boto
-
-# Gsutil cache/config (if not in the default .config/gcloud/)
-.gsutil/
 
 # --- 6. Log & Build Files ---
 # More generic log files
