@@ -1,5 +1,10 @@
 # --- config.nu ---
 
+# Load secrets if the file exists
+if ("~/.dev_secrets" | path exists) {
+    source ~/.dev_secrets
+}
+
 # 1. Import your Container Commands
 # Assuming containers.nu is in the same folder as this config file
 use containers.nu * # 2. Keep the Health Check (This is still useful!)
