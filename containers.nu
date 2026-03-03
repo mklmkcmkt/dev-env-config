@@ -14,8 +14,7 @@ def get-common-mounts [] {
         "-v" $"($home)/dev-env-config/config.nu:/root/.config/nushell/config.nu"
         "-v" $"($home)/dev-env-config/containers.nu:/root/.config/nushell/containers.nu"
 
-        # Secrets and Cloud Configs (Renamed from Zsh to Dev for clarity)
-        "-v" $"($home)/.dev_secrets:/root/.dev_secrets:ro"
+        # Cloud Configs (Notice we removed the old .dev_secrets mount!)
         "-v" $"($home)/dev-env-config:/etc/dev-env-config"
         "-v" $"($home)/.config/gcloud:/root/.config/gcloud"
         "-v" $"($home)/snap/gh/current/.config/gh:/root/.config/gh"
@@ -44,22 +43,21 @@ def run-dev [name: string, project_src: string, image: string, extra_args: list<
     ^podman ...$final_args
 }
 
-# 3. Exported Dev Commands
+# 3. Dev env containers
 export def apps [...args: string] { 
     let home = (get-home)
-    let cmd = if ($args | is-empty) { ["nu"] } else { $args }
-    run-dev "dev-apps" $"($home)/dev-env/app" "localhost/dev-apps:latest" ["-v" $"($home)/.kube:/root/.kube"] $cmd
+    let cmd = if ($args | is-empty) { ["nu", "-e", "load-cloud-secrets"] } else { $args }
+    run-dev "dev-app" $"($home)/dev-env/app" "localhost/apps:latest" ["-v" $"($home)/.kube:/root/.kube"] $cmd
 }
 
 export def infra [...args: string] { 
     let home = (get-home)
-    let cmd = if ($args | is-empty) { ["nu"] } else { $args }
-    run-dev "dev-infra" $"($home)/dev-env/infra" "localhost/dev-infra:latest" ["-v" $"($home)/.kube:/root/.kube"] $cmd
+    let cmd = if ($args | is-empty) { ["nu", "-e", "load-cloud-secrets"] } else { $args }
+    run-dev "dev-infra" $"($home)/dev-env/infra" "localhost/infra:latest" ["-v" $"($home)/.kube:/root/.kube"] $cmd
 }
 
 export def base [...args: string] { 
     let home = (get-home)
-    let cmd = if ($args | is-empty) { ["nu"] } else { $args }
-    run-dev "base-dev" $home "localhost/dev-base:latest" ["-v" $"($home)/.kube:/root/.kube"] $cmd
+    let cmd = if ($args | is-empty) { ["nu", "-e", "load-cloud-secrets"] } else { $args }
+    run-dev "dev-base" $home "localhost/dev-base:latest" ["-v" $"($home)/.kube:/root/.kube"] $cmd
 }
-
