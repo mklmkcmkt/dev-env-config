@@ -69,3 +69,5 @@ for path in $required_paths {
 # --- Aliases ---
 # Launch Antigravity from the terminal
 alias ag = antigravity
+alias tf = terraform
+alias ot = tofu
