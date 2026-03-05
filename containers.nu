@@ -47,13 +47,15 @@ def run-dev [name: string, project_src: string, image: string, extra_args: list<
 export def apps [...args: string] { 
     let home = (get-home)
     let cmd = if ($args | is-empty) { ["nu", "-e", "load-cloud-secrets"] } else { $args }
-    run-dev "dev-app" $"($home)/dev-env/app" "localhost/apps:latest" ["-v" $"($home)/.kube:/root/.kube"] $cmd
+    # FIXED: point to localhost/dev-apps:latest
+    run-dev "dev-app" $"($home)/dev-env/app" "localhost/dev-apps:latest" ["-v" $"($home)/.kube:/root/.kube"] $cmd
 }
 
 export def infra [...args: string] { 
     let home = (get-home)
     let cmd = if ($args | is-empty) { ["nu", "-e", "load-cloud-secrets"] } else { $args }
-    run-dev "dev-infra" $"($home)/dev-env/infra" "localhost/infra:latest" ["-v" $"($home)/.kube:/root/.kube"] $cmd
+    # FIXED: point to localhost/dev-infra:latest
+    run-dev "dev-infra" $"($home)/dev-env/infra" "localhost/dev-infra:latest" ["-v" $"($home)/.kube:/root/.kube"] $cmd
 }
 
 export def base [...args: string] { 
