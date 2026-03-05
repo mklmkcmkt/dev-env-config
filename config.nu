@@ -1,7 +1,11 @@
 # --- config.nu ---
 
+# --- System Editor Defaults ---
+# This tells Git and your OS to use Antigravity instead of VS Code or Nano
+$env.EDITOR = "antigravity"
+$env.VISUAL = "antigravity"
+
 # --- Google Secret Manager Loader ---
-# Notice the '--env' flag! This allows the function to modify your active shell.
 def --env load-cloud-secrets [] {
     # 1. Detect the current active gcloud project
     let default_pid = (^gcloud config get-value project | str trim)
@@ -24,21 +28,28 @@ def --env load-cloud-secrets [] {
         return
     }
     
-print $"🔒 Fetching secrets from Google Secret Manager [Project: ($pid)]..."
+    print $"🔒 Fetching secrets from Google Secret Manager [Project: ($pid)]..."
 
-    # Fetch Gemini API Key
-    let gemini_key = (^gcloud secrets versions access latest --secret "gemini-api-key" --project $pid | str trim)
-    $env.GEMINI_API_KEY = $gemini_key
+    # Fetch Gemini API Key (Updated to use gemini-api-key and masked errors!)
+    let gemini_key = (^gcloud secrets versions access latest --secret "gemini-api-key" --project $pid err> /dev/null | str trim)
+    if not ($gemini_key | is-empty) {
+        $env.GEMINI_API_KEY = $gemini_key
+    } else {
+        print "⚠️ Warning: gemini-api-key not found."
+    }
 
-    # Fetch GitHub Token
-    let gh_token = (^gcloud secrets versions access latest --secret "github-token" --project $pid | str trim)
-    $env.GITHUB_TOKEN = $gh_token
+    # Fetch GitHub Token (Kept hyphen based on your gcloud output, and masked errors!)
+    let gh_token = (^gcloud secrets versions access latest --secret "github-token" --project $pid err> /dev/null | str trim)
+    if not ($gh_token | is-empty) {
+        $env.GITHUB_TOKEN = $gh_token
+    } else {
+        print "⚠️ Warning: github-token not found."
+    }
 
     print "✅ Secrets successfully loaded into RAM!"
 }
 
 # 2. Import your Container Commands
-
 use ~/.config/nushell/containers.nu *
 
 # 3. Keep the Health Check
